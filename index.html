@@ -9,16 +9,16 @@
 
 <body>
     <div class="container">
-        <h3>Time On</h3>
+        <h3>Focus</h3>
         <input type="time" min="00:00" max="60:00" id="timeOn" class="form-control timepicker">
-        <h3>Time Off</h3>
+        <h3>Relax</h3>
         <input type="time" min="00:00" max="60:00" id="timeOff" class="form-control timepicker">
         <br>
         <button id="start" class="btn btn-success">Start</button>
         <button id="pause" class="btn btn-light">Pause</button>
         <button id="stop" class="btn btn-danger">Stop</button>
         <br>
-        <h3>Time Remaining</h3>
+        <h3><span id="timeType"></span> Time Remaining</h3>
         <p><span id="timeRemainingMinutes">0</span> minutes <span id="timeRemainingSeconds">0</span> seconds</p>
     </div>
     <script src="script.js"></script>

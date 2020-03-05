@@ -5,10 +5,14 @@ let timeRemainingSecondsCounter = document.getElementById(
   "timeRemainingSeconds"
 );
 
+let timeType = document.getElementById("timeType");
+
+let id;
 let isOn = false;
 let isOff = false;
 let timesPaused = 0;
 
+let stopped = false;
 let paused = false;
 
 let startButton = document.getElementById("start");
@@ -17,6 +21,7 @@ let stopButton = document.getElementById("stop");
 
 timeOn.addEventListener("input", checkIfReady);
 timeOff.addEventListener("input", checkIfReady);
+stopButton.addEventListener("click", stop);
 
 function pause() {
   timesPaused++;
@@ -49,12 +54,13 @@ function checkIfReady() {
 }
 
 function startOnTimer() {
+  timeType.innerHTML = "Focused";
   startButton.removeEventListener("click", startOnTimer);
   isOff = false;
   isOn = true;
   pauseButton.addEventListener("click", pause);
 
-  let id = setInterval(frame, 1000);
+  id = setInterval(frame, 1000);
   function frame() {
     if (paused === true) {
       clearInterval(id);
@@ -93,11 +99,26 @@ function setInitialOffConditions() {
   timeRemainingMinutes = parseInt(timeOffMinutes);
 }
 
+function stop() {
+  clearInterval(id);
+  paused = false;
+  pauseButton.innerHTML = "Pause";
+  timeType.innerHTML = "";
+  timeRemainingMinutesCounter.innerHTML = 0;
+  timeRemainingSecondsCounter.innerHTML = 0;
+  isOn = false;
+  isOff = false;
+  timesPaused = 0;
+  setInitialOnConditions();
+  startButton.addEventListener("click", startOnTimer);
+}
+
 function startOffTimer() {
+  timeType.innerHTML = "Relaxed";
   isOn = false;
   isOff = true;
 
-  let id = setInterval(frame, 1000);
+  id = setInterval(frame, 1000);
   function frame() {
     if (paused === true) {
       clearInterval(id);
