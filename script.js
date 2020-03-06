@@ -6,6 +6,7 @@ let timeRemainingSecondsCounter = document.getElementById(
 );
 
 let timeType = document.getElementById("timeType");
+let background = document.getElementById("background");
 
 let id;
 let isOn = false;
@@ -18,6 +19,7 @@ let paused = false;
 let startButton = document.getElementById("start");
 let pauseButton = document.getElementById("pause");
 let stopButton = document.getElementById("stop");
+let pauseTect = document.getElementById("pauseText");
 
 timeOn.addEventListener("input", checkIfReady);
 timeOff.addEventListener("input", checkIfReady);
@@ -27,11 +29,11 @@ function pause() {
   timesPaused++;
   if (paused === false) {
     paused = true;
-    pauseButton.innerHTML = "Resume";
+    pauseText.innerHTML = "Resume";
     startButton.addEventListener("click", startOnTimer);
   } else {
     paused = false;
-    pauseButton.innerHTML = "Pause";
+    pauseText.innerHTML = "Pause";
     if (isOn === true) {
       startOnTimer();
     }
@@ -55,6 +57,7 @@ function checkIfReady() {
 
 function startOnTimer() {
   timeType.innerHTML = "Focused";
+  background.style.cssText = "background-color: #b5e7a0;"
   startButton.removeEventListener("click", startOnTimer);
   isOff = false;
   isOn = true;
@@ -114,6 +117,7 @@ function stop() {
 }
 
 function startOffTimer() {
+  background.style.cssText = "background-color: #d5e1df;"
   timeType.innerHTML = "Relaxed";
   isOn = false;
   isOff = true;

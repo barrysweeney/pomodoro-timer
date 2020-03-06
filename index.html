@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Pomodoro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/2491a428fb.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body id="background">
     <div class="container">
         <h3>Focus</h3>
         <input type="time" min="00:00" max="60:00" id="timeOn" class="form-control timepicker">
         <h3>Relax</h3>
         <input type="time" min="00:00" max="60:00" id="timeOff" class="form-control timepicker">
         <br>
-        <button id="start" class="btn btn-success">Start</button>
-        <button id="pause" class="btn btn-light">Pause</button>
-        <button id="stop" class="btn btn-danger">Stop</button>
+        <button id="start" class="btn btn-success">Start<i class="fas fa-play"></i></button>
+        <button id="pause" class="btn btn-light"><span id="pauseText">Pause</span><i class="fas fa-pause"></i></button>
+        <button id="stop" class="btn btn-danger">Stop<i class="fas fa-stop"></i></button>
         <br>
         <h3><span id="timeType"></span> Time Remaining</h3>
         <p><span id="timeRemainingMinutes">0</span> minutes <span id="timeRemainingSeconds">0</span> seconds</p>
