@@ -19,31 +19,13 @@ let paused = false;
 let startButton = document.getElementById("start");
 let pauseButton = document.getElementById("pause");
 let stopButton = document.getElementById("stop");
-let pauseTect = document.getElementById("pauseText");
+let pauseText = document.getElementById("pauseText");
 
-timeOn.addEventListener("input", checkIfReady);
-timeOff.addEventListener("input", checkIfReady);
+timeOn.addEventListener("input", checkIfTimesEntered);
+timeOff.addEventListener("input", checkIfTimesEntered);
 stopButton.addEventListener("click", stop);
 
-function pause() {
-  timesPaused++;
-  if (paused === false) {
-    paused = true;
-    pauseText.innerHTML = "Resume";
-    startButton.addEventListener("click", startOnTimer);
-  } else {
-    paused = false;
-    pauseText.innerHTML = "Pause";
-    if (isOn === true) {
-      startOnTimer();
-    }
-    if (isOff === true) {
-      startOffTimer();
-    }
-  }
-}
-
-function checkIfReady() {
+function checkIfTimesEntered() {
   if (
     parseInt(timeOn.value.split(":")[0]) >= 0 &&
     parseInt(timeOn.value.split(":")[1]) >= 0 &&
@@ -55,9 +37,20 @@ function checkIfReady() {
   }
 }
 
+function setInitialOnConditions() {
+  let timeOn = document.getElementById("timeOn");
+  timeOnMinutes = timeOn.value.split(":")[0];
+  timeOnSeconds = timeOn.value.split(":")[1];
+  setTimeOnRemaining();
+}
+
+function setTimeOnRemaining() {
+  timeRemainingSeconds = parseInt(timeOnSeconds);
+  timeRemainingMinutes = parseInt(timeOnMinutes);
+}
+
 function startOnTimer() {
-  timeType.innerHTML = "Focused";
-  background.style.cssText = "background-color: #b5e7a0;"
+  displayOnTimer();
   startButton.removeEventListener("click", startOnTimer);
   isOff = false;
   isOn = true;
@@ -65,41 +58,102 @@ function startOnTimer() {
 
   id = setInterval(frame, 1000);
   function frame() {
-    if (paused === true) {
+    let timerFinished =
+      timeRemainingMinutes === 0 && timeRemainingSeconds === 0;
+    let zeroSecondsRemaining = timeRemainingSeconds === 0;
+    if (paused) {
       clearInterval(id);
-    } else if (timeRemainingMinutes === 0 && timeRemainingSeconds === 0) {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
+    } else if (timerFinished) {
+      displayTimeRemaining();
       clearInterval(id);
       setInitialOffConditions();
       startOffTimer();
-    } else if (timeRemainingSeconds === 0) {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
-      timeRemainingMinutes--;
-      timeRemainingSeconds = 59;
+    } else if (zeroSecondsRemaining) {
+      displayTimeRemaining();
+      startNextMinute();
     } else {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
+      displayTimeRemaining();
       timeRemainingSeconds--;
     }
   }
 }
 
-function setInitialOnConditions() {
-  let timeOn = document.getElementById("timeOn");
-  timeOnMinutes = timeOn.value.split(":")[0];
-  timeOnSeconds = timeOn.value.split(":")[1];
-  timeRemainingSeconds = parseInt(timeOnSeconds);
-  timeRemainingMinutes = parseInt(timeOnMinutes);
+function displayOnTimer() {
+  timeType.innerHTML = "Focused";
+  background.style.cssText = "background-color: #b5e7a0;";
+}
+
+function setTimeOffRemaining() {
+  timeRemainingSeconds = parseInt(timeOffSeconds);
+  timeRemainingMinutes = parseInt(timeOffMinutes);
 }
 
 function setInitialOffConditions() {
   let timeOff = document.getElementById("timeOff");
   timeOffMinutes = timeOff.value.split(":")[0];
   timeOffSeconds = timeOff.value.split(":")[1];
-  timeRemainingSeconds = parseInt(timeOffSeconds);
-  timeRemainingMinutes = parseInt(timeOffMinutes);
+  setTimeOffRemaining();
+}
+
+function startOffTimer() {
+  displayOffTimer();
+
+  isOn = false;
+  isOff = true;
+
+  id = setInterval(frame, 1000);
+  function frame() {
+    let timerFinished =
+      timeRemainingMinutes === 0 && timeRemainingSeconds === 0;
+    let zeroSecondsRemaining = timeRemainingSeconds === 0;
+    if (paused) {
+      clearInterval(id);
+    } else if (timerFinished) {
+      displayTimeRemaining();
+      clearInterval(id);
+      setInitialOnConditions();
+      startOnTimer();
+    } else if (zeroSecondsRemaining) {
+      displayTimeRemaining();
+      startNextMinute();
+    } else {
+      displayTimeRemaining();
+      timeRemainingSeconds--;
+    }
+  }
+}
+
+function displayOffTimer() {
+  background.style.cssText = "background-color: #d5e1df;";
+  timeType.innerHTML = "Relaxed";
+}
+
+function startNextMinute() {
+  timeRemainingMinutes--;
+  timeRemainingSeconds = 59;
+}
+
+function displayTimeRemaining() {
+  timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
+  timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
+}
+
+function pause() {
+  timesPaused++;
+  if (!paused) {
+    paused = true;
+    pauseText.innerHTML = "Resume";
+    startButton.addEventListener("click", startOnTimer);
+  } else {
+    paused = false;
+    pauseText.innerHTML = "Pause";
+    if (isOn) {
+      startOnTimer();
+    }
+    if (isOff) {
+      startOffTimer();
+    }
+  }
 }
 
 function stop() {
@@ -114,35 +168,4 @@ function stop() {
   timesPaused = 0;
   setInitialOnConditions();
   startButton.addEventListener("click", startOnTimer);
-}
-
-function startOffTimer() {
-  background.style.cssText = "background-color: #d5e1df;"
-  timeType.innerHTML = "Relaxed";
-  isOn = false;
-  isOff = true;
-
-  id = setInterval(frame, 1000);
-  function frame() {
-    if (paused === true) {
-      clearInterval(id);
-    } else if (timeRemainingMinutes === 0 && timeRemainingSeconds === 0) {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
-      clearInterval(id);
-      timeRemainingSeconds = parseInt(timeOnSeconds);
-      timeRemainingMinutes = parseInt(timeOnMinutes);
-      setInitialOnConditions();
-      startOnTimer();
-    } else if (timeRemainingSeconds === 0) {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
-      timeRemainingMinutes--;
-      timeRemainingSeconds = 59;
-    } else {
-      timeRemainingMinutesCounter.innerHTML = timeRemainingMinutes;
-      timeRemainingSecondsCounter.innerHTML = timeRemainingSeconds;
-      timeRemainingSeconds--;
-    }
-  }
 }
