@@ -21,26 +21,15 @@ let pauseButton = document.getElementById("pause");
 let stopButton = document.getElementById("stop");
 let pauseText = document.getElementById("pauseText");
 
-timeOn.addEventListener("input", checkIfTimesEntered);
-timeOff.addEventListener("input", checkIfTimesEntered);
 stopButton.addEventListener("click", stop);
 
-function checkIfTimesEntered() {
-  if (
-    parseInt(timeOn.value.split(":")[0]) >= 0 &&
-    parseInt(timeOn.value.split(":")[1]) >= 0 &&
-    parseInt(timeOff.value.split(":")[0]) >= 0 &&
-    parseInt(timeOff.value.split(":")[1]) >= 0
-  ) {
-    setInitialOnConditions();
-    startButton.addEventListener("click", startOnTimer);
-  }
-}
+setInitialOnConditions();
+startButton.addEventListener("click", startOnTimer);
 
 function setInitialOnConditions() {
   let timeOn = document.getElementById("timeOn");
-  timeOnMinutes = timeOn.value.split(":")[0];
-  timeOnSeconds = timeOn.value.split(":")[1];
+  timeOnMinutes = timeOn.value.split(":")[1];
+  timeOnSeconds = timeOn.value.split(":")[2];
   setTimeOnRemaining();
 }
 
