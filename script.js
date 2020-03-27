@@ -91,8 +91,8 @@ function setTimeOffRemaining() {
 
 function setInitialOffConditions() {
   let timeOff = document.getElementById("timeOff");
-  timeOffMinutes = timeOff.value.split(":")[0];
-  timeOffSeconds = timeOff.value.split(":")[1];
+  timeOffMinutes = timeOff.value.split(":")[1];
+  timeOffSeconds = timeOff.value.split(":")[2];
   setTimeOffRemaining();
 }
 
